@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% from "_macros.html" import badge %}
+{% block content %}
+<h3 class="mb-3">Appointments</h3>
+<ul class="nav nav-pills mb-3">
+{% for k, label in [('all','All'),('upcoming','Upcoming'),('past','Past')] %}
+<li class="nav-item"><a class="nav-link {{ 'active' if when==k }}" href="{{ url_for('admin.appointments', when=k) }}">{{ label }}</a></li>{% endfor %}
+</ul>
+<div class="card"><div class="table-responsive"><table class="table align-middle mb-0">
+<thead><tr><th>#</th><th>Date</th><th>Time</th><th>Patient</th><th>Doctor</th><th>Department</th><th>Status</th><th></th></tr></thead><tbody>
+{% for a in appts %}<tr><td>{{ a.id }}</td><td>{{ a.date }}</td><td>{{ a.time }}</td><td>{{ a.patient_name }}</td><td>{{ a.doctor_name }}</td><td>{{ a.dept or '-' }}</td><td>{{ badge(a.status) }}</td>
+<td class="text-end">{% if a.status == 'Booked' %}<form method="post" action="{{ url_for('admin.appointment_cancel', appt_id=a.id) }}" onsubmit="return confirm('Cancel this appointment?')"><button class="btn btn-sm btn-outline-danger">Cancel</button></form>{% endif %}</td></tr>
+{% else %}<tr><td colspan="8" class="text-center text-muted py-4">No appointments.</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endblock %}

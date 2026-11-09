@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% from "_macros.html" import badge %}
+{% macro appt_table(rows, show_date) %}
+<table class="table align-middle"><thead><tr>{% if show_date %}<th>Date</th>{% endif %}<th>Time</th><th>Patient</th><th>Reason</th><th></th></tr></thead><tbody>
+{% for a in rows %}<tr>{% if show_date %}<td>{{ a.date }}</td>{% endif %}<td>{{ a.time }}</td><td><a href="{{ url_for('doctor.patient_history', patient_id=a.patient_id) }}">{{ a.patient_name }}</a></td><td>{{ a.reason or '-' }}</td>
+<td class="text-end text-nowrap"><a class="btn btn-sm btn-success" href="{{ url_for('doctor.complete', appt_id=a.id) }}">Complete</a>
+<form method="post" action="{{ url_for('doctor.cancel', appt_id=a.id) }}" class="d-inline" onsubmit="return confirm('Cancel this appointment?')"><button class="btn btn-sm btn-outline-danger">Cancel</button></form></td></tr>
+{% else %}<tr><td colspan="5" class="text-muted">Nothing scheduled.</td></tr>{% endfor %}</tbody></table>
+{% endmacro %}
+{% block content %}
+<h3 class="mb-3">Welcome, Dr. {{ g.profile.name }}</h3>
+<div class="row g-3">
+<div class="col-lg-6"><div class="card p-3"><h6>Today's appointments</h6>{{ appt_table(todays, false) }}</div></div>
+<div class="col-lg-6"><div class="card p-3"><h6>This week (next 7 days)</h6>{{ appt_table(week, true) }}</div></div>
+<div class="col-12"><div class="card p-3"><h6>My patients</h6>
+<table class="table mb-0"><thead><tr><th>ID</th><th>Name</th><th>Age</th><th>Gender</th><th>Phone</th><th>Visits</th><th></th></tr></thead><tbody>
+{% for p in patients %}<tr><td>{{ p.id }}</td><td>{{ p.name }}</td><td>{{ p.age or '-' }}</td><td>{{ p.gender or '-' }}</td><td>{{ p.phone or '-' }}</td><td>{{ p.visits }}</td>
+<td class="text-end"><a class="btn btn-sm btn-outline-primary" href="{{ url_for('doctor.patient_history', patient_id=p.id) }}">View history</a></td></tr>
+{% else %}<tr><td colspan="7" class="text-muted">No patients assigned yet.</td></tr>{% endfor %}</tbody></table></div></div>
+</div>
+{% endblock %}

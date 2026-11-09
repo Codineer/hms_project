@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card p-3 mb-3"><h4>{{ p.name }}</h4><div>Age: {{ p.age or '-' }} &middot; Gender: {{ p.gender or '-' }} &middot; Phone: {{ p.phone or '-' }}</div>
+<div><a href="{{ url_for('doctor.dashboard') }}">&larr; Back</a></div></div>
+<h5>Treatment history</h5>
+{% for h in history %}
+<div class="card p-3 mb-2"><div class="d-flex justify-content-between"><strong>{{ h.date }} {{ h.time }}</strong><span class="text-muted">Dr. {{ h.doctor_name }} ({{ h.dept or 'General' }})</span></div>
+<div><b>Diagnosis:</b> {{ h.diagnosis }}</div><div><b>Prescription:</b> {{ h.prescription or '-' }}</div><div><b>Notes:</b> {{ h.notes or '-' }}</div></div>
+{% else %}<p class="text-muted">No completed visits yet.</p>{% endfor %}
+{% endblock %}

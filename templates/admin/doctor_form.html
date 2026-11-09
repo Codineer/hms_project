@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card p-4"><h4 class="mb-3">{{ 'Edit' if editing else 'Add' }} Doctor</h4>
+<form method="post" class="row g-3">
+  {% if not editing %}
+  <div class="col-md-6"><label class="form-label">Username*</label><input name="username" class="form-control" minlength="3" required value="{{ doc.get('username','') if doc else '' }}"></div>
+  <div class="col-md-6"><label class="form-label">Password*</label><input type="password" name="password" class="form-control" minlength="6" required></div>
+  {% else %}
+  <div class="col-md-6"><label class="form-label">Username</label><input class="form-control" value="{{ doc['username'] }}" disabled></div>
+  <div class="col-md-6"><label class="form-label">New password (leave blank to keep)</label><input type="password" name="password" class="form-control" minlength="6"></div>
+  {% endif %}
+  <div class="col-md-6"><label class="form-label">Name*</label><input name="name" class="form-control" required value="{{ doc['name'] if doc and doc['name'] is defined else '' }}"></div>
+  <div class="col-md-6"><label class="form-label">Specialization</label>
+    <select name="department_id" class="form-select"><option value="">-- none --</option>
+    {% for d in depts %}<option value="{{ d.id }}" {{ 'selected' if doc and (doc['department_id']|string) == (d.id|string) }}>{{ d.name }}</option>{% endfor %}</select></div>
+  <div class="col-md-4"><label class="form-label">Experience (years)</label><input type="number" min="0" name="experience" class="form-control" value="{{ doc['experience'] if doc and doc['experience'] is defined else 0 }}"></div>
+  <div class="col-md-4"><label class="form-label">Qualification</label><input name="qualification" class="form-control" value="{{ doc['qualification'] if doc and doc['qualification'] is defined else '' }}"></div>
+  <div class="col-md-4"><label class="form-label">Phone</label><input name="phone" class="form-control" value="{{ doc['phone'] if doc and doc['phone'] is defined else '' }}"></div>
+  <div class="col-12"><label class="form-label">Profile / bio</label><textarea name="bio" rows="3" class="form-control">{{ doc['bio'] if doc and doc['bio'] is defined else '' }}</textarea></div>
+  <div class="col-12"><button class="btn btn-primary">Save</button> <a class="btn btn-link" href="{{ url_for('admin.doctors') }}">Cancel</a></div>
+</form></div>
+{% endblock %}

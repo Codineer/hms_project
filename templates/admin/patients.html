@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<h3 class="mb-3">Patients</h3>
+<form class="row g-2 mb-3"><div class="col-md-6"><input name="q" value="{{ q }}" class="form-control" placeholder="Search by name, ID or contact number"></div>
+<div class="col-auto"><button class="btn btn-outline-primary">Search</button> <a class="btn btn-link" href="{{ url_for('admin.patients') }}">Reset</a></div></form>
+<div class="card"><div class="table-responsive"><table class="table align-middle mb-0">
+<thead><tr><th>ID</th><th>Name</th><th>Age</th><th>Gender</th><th>Contact</th><th>Status</th><th></th></tr></thead><tbody>
+{% for p in patients %}
+<tr><td>{{ p.id }}</td><td>{{ p.name }}<div class="small text-muted">@{{ p.username }}</div></td><td>{{ p.age or '-' }}</td><td>{{ p.gender or '-' }}</td><td>{{ p.phone or '-' }}</td>
+<td>{% if p.is_active %}<span class="badge bg-success">Active</span>{% else %}<span class="badge bg-danger">Blacklisted</span>{% endif %}</td>
+<td class="text-end text-nowrap">
+<a class="btn btn-sm btn-outline-secondary" href="{{ url_for('admin.patient_detail', patient_id=p.id) }}">View</a>
+<a class="btn btn-sm btn-outline-primary" href="{{ url_for('admin.patient_edit', patient_id=p.id) }}">Edit</a>
+<form method="post" action="{{ url_for('admin.patient_blacklist', patient_id=p.id) }}" class="d-inline"><button class="btn btn-sm btn-outline-warning">{{ 'Blacklist' if p.is_active else 'Reinstate' }}</button></form>
+<form method="post" action="{{ url_for('admin.patient_delete', patient_id=p.id) }}" class="d-inline" onsubmit="return confirm('Delete this patient and all their records?')"><button class="btn btn-sm btn-outline-danger">Delete</button></form>
+</td></tr>
+{% else %}<tr><td colspan="7" class="text-center text-muted py-4">No patients found.</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endblock %}

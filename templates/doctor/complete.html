@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card p-4"><h4>Visit: {{ a.patient_name }}</h4>
+<p class="text-muted">{{ a.date }} at {{ a.time }}{% if a.reason %} &middot; Reason: {{ a.reason }}{% endif %}</p>
+<form method="post">
+<div class="mb-3"><label class="form-label">Diagnosis*</label><textarea name="diagnosis" class="form-control" rows="2" required>{{ a.diagnosis or '' }}</textarea></div>
+<div class="mb-3"><label class="form-label">Prescription</label><textarea name="prescription" class="form-control" rows="3">{{ a.prescription or '' }}</textarea></div>
+<div class="mb-3"><label class="form-label">Doctor's notes</label><textarea name="notes" class="form-control" rows="3">{{ a.notes or '' }}</textarea></div>
+<button class="btn btn-success">Save &amp; mark completed</button> <a class="btn btn-link" href="{{ url_for('doctor.dashboard') }}">Back</a>
+</form></div>
+{% endblock %}

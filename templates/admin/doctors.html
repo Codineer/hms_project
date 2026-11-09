@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3>Doctors</h3><a class="btn btn-primary" href="{{ url_for('admin.doctor_form') }}">+ Add Doctor</a>
+</div>
+<form class="row g-2 mb-3"><div class="col-md-6"><input name="q" value="{{ q }}" class="form-control" placeholder="Search by name or specialization"></div>
+  <div class="col-auto"><button class="btn btn-outline-primary">Search</button> <a class="btn btn-link" href="{{ url_for('admin.doctors') }}">Reset</a></div></form>
+<div class="card"><div class="table-responsive"><table class="table align-middle mb-0">
+<thead><tr><th>ID</th><th>Name</th><th>Specialization</th><th>Exp.</th><th>Phone</th><th>Status</th><th></th></tr></thead><tbody>
+{% for d in doctors %}
+<tr><td>{{ d.id }}</td><td>{{ d.name }}<div class="small text-muted">@{{ d.username }}</div></td><td>{{ d.dept or '-' }}</td><td>{{ d.experience }} yrs</td><td>{{ d.phone }}</td>
+<td>{% if d.is_active %}<span class="badge bg-success">Active</span>{% else %}<span class="badge bg-danger">Blacklisted</span>{% endif %}</td>
+<td class="text-end text-nowrap">
+  <a class="btn btn-sm btn-outline-primary" href="{{ url_for('admin.doctor_form', doctor_id=d.id) }}">Edit</a>
+  <form method="post" action="{{ url_for('admin.doctor_blacklist', doctor_id=d.id) }}" class="d-inline"><button class="btn btn-sm btn-outline-warning">{{ 'Blacklist' if d.is_active else 'Reinstate' }}</button></form>
+  <form method="post" action="{{ url_for('admin.doctor_delete', doctor_id=d.id) }}" class="d-inline" onsubmit="return confirm('Delete this doctor and all their appointments?')"><button class="btn btn-sm btn-outline-danger">Delete</button></form>
+</td></tr>
+{% else %}<tr><td colspan="7" class="text-muted text-center py-4">No doctors found.</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% from "_macros.html" import badge %}
+{% block content %}
+<h3 class="mb-3">My appointment history</h3>
+{% for a in appts %}
+<div class="card p-3 mb-2"><div class="d-flex justify-content-between"><strong>{{ a.date }} {{ a.time }} &mdash; Dr. {{ a.doctor_name }} <span class="text-muted">({{ a.dept or 'General' }})</span></strong>{{ badge(a.status) }}</div>
+{% if a.status == 'Completed' %}<div class="mt-2"><b>Diagnosis:</b> {{ a.diagnosis }}</div><div><b>Prescription:</b> {{ a.prescription or '-' }}</div><div><b>Doctor's notes:</b> {{ a.notes or '-' }}</div>{% endif %}</div>
+{% else %}<p class="text-muted">No appointments yet.</p>{% endfor %}
+{% endblock %}

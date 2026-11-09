@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% from "_macros.html" import badge %}
+{% block content %}
+<div class="card p-3 mb-3"><h4>{{ p.name }} <small class="text-muted">#{{ p.id }}</small></h4>
+<div>Age: {{ p.age or '-' }} &middot; Gender: {{ p.gender or '-' }} &middot; Phone: {{ p.phone or '-' }}</div>
+<div>Address: {{ p.address or '-' }}</div>
+<div class="mt-2"><a class="btn btn-sm btn-outline-primary" href="{{ url_for('admin.patient_edit', patient_id=p.id) }}">Edit</a>
+<a class="btn btn-sm btn-link" href="{{ url_for('admin.patients') }}">Back</a></div></div>
+<div class="card p-3"><h6>Appointment &amp; treatment history</h6>
+<table class="table table-sm"><thead><tr><th>Date</th><th>Time</th><th>Doctor</th><th>Status</th><th>Diagnosis</th><th>Prescription</th></tr></thead><tbody>
+{% for a in appts %}<tr><td>{{ a.date }}</td><td>{{ a.time }}</td><td>{{ a.doctor_name }}</td><td>{{ badge(a.status) }}</td><td>{{ a.diagnosis or '-' }}</td><td>{{ a.prescription or '-' }}</td></tr>
+{% else %}<tr><td colspan="6" class="text-muted">No appointments.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

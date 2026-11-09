@@ -1,0 +1,3 @@
+{% macro badge(status) %}
+<span class="badge bg-{{ {'Booked':'primary','Completed':'success','Cancelled':'secondary'}[status] }}">{{ status }}</span>
+{% endmacro %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% from "_macros.html" import badge %}
+{% block content %}
+<h3 class="mb-3">Hello, {{ g.profile.name }}</h3>
+<div class="card p-3 mb-4"><h6>Upcoming appointments</h6>
+<table class="table align-middle mb-0"><thead><tr><th>Date</th><th>Time</th><th>Doctor</th><th>Department</th><th>Status</th><th></th></tr></thead><tbody>
+{% for a in upcoming %}<tr><td>{{ a.date }}</td><td>{{ a.time }}</td><td>{{ a.doctor_name }}</td><td>{{ a.dept or '-' }}</td><td>{{ badge(a.status) }}</td>
+<td class="text-end text-nowrap"><a class="btn btn-sm btn-outline-primary" href="{{ url_for('patient.reschedule', appt_id=a.id) }}">Reschedule</a>
+<form method="post" action="{{ url_for('patient.cancel', appt_id=a.id) }}" class="d-inline" onsubmit="return confirm('Cancel this appointment?')"><button class="btn btn-sm btn-outline-danger">Cancel</button></form></td></tr>
+{% else %}<tr><td colspan="6" class="text-muted">No upcoming appointments. <a href="{{ url_for('patient.doctors') }}">Book one</a>.</td></tr>{% endfor %}</tbody></table></div>
+<h5>Departments</h5>
+<div class="row g-3">{% for d in depts %}
+<div class="col-md-4"><div class="card p-3 h-100"><h6>{{ d.name }}</h6><p class="small text-muted mb-2">{{ d.description }}</p>
+<div class="mt-auto d-flex justify-content-between align-items-center"><span class="badge bg-light text-dark">{{ d.doctors_registered }} doctor(s)</span>
+<a class="btn btn-sm btn-primary" href="{{ url_for('patient.doctors', dept=d.id) }}">View doctors</a></div></div></div>{% endfor %}</div>
+{% endblock %}

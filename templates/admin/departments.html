@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h3 class="mb-3">Departments / Specializations</h3>
+<div class="row g-3">
+<div class="col-md-8"><div class="card"><table class="table mb-0"><thead><tr><th>ID</th><th>Name</th><th>Description</th><th>Doctors registered</th></tr></thead><tbody>
+{% for d in departments %}<tr><td>{{ d.id }}</td><td>{{ d.name }}</td><td>{{ d.description }}</td><td>{{ d.doctors_registered }}</td></tr>{% endfor %}
+</tbody></table></div></div>
+<div class="col-md-4"><div class="card p-3"><h6>Add department</h6>
+<form method="post"><input name="name" class="form-control mb-2" placeholder="Name" required>
+<textarea name="description" class="form-control mb-2" rows="2" placeholder="Description"></textarea><button class="btn btn-primary btn-sm">Add</button></form></div></div>
+</div>
+{% endblock %}

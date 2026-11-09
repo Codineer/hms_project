@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card p-4 mb-3"><h4>{{ doc.name }}</h4><div class="text-muted">{{ doc.dept or 'General' }} &middot; {{ doc.experience }} yrs &middot; {{ doc.qualification }}</div>
+<p class="mt-2 mb-0">{{ doc.bio or 'No profile information provided.' }}</p></div>
+<div class="card p-3"><h6>Availability (next 7 days)</h6>
+<form method="post" action="{{ url_for('patient.book') }}">
+<input type="hidden" name="doctor_id" value="{{ doc.id }}">
+{% for d, ss in slots.items() %}
+<div class="mb-2"><strong class="me-2">{{ d }}</strong>
+{% for s in ss %}<button name="slot" value="{{ s }}" class="btn btn-outline-primary btn-sm slot-btn" onclick="this.form.date.value='{{ d }}'">{{ s }}</button>
+{% else %}<span class="text-muted small">No slots</span>{% endfor %}</div>
+{% endfor %}
+<input type="hidden" name="date" value="">
+<div class="mt-3"><label class="form-label">Reason for visit (optional) &mdash; fill before choosing a slot</label><input name="reason" class="form-control" maxlength="200"></div>
+</form></div>
+{% endblock %}
